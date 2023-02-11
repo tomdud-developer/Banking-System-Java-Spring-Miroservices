@@ -9,7 +9,7 @@ import java.util.Date;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity
+@Entity(name = "cash_transactions")
 public class Transaction {
     @Id
     @SequenceGenerator(
@@ -23,10 +23,10 @@ public class Transaction {
     @Column
     private Long id;
 
-    @Column(name = "from")
+    @Column(name = "value_from")
     private Long from;
 
-    @Column(name = "to")
+    @Column(name = "value_to")
     private Long to;
 
     @Column(name = "amount")
