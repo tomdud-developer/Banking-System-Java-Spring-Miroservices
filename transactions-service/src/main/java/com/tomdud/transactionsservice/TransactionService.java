@@ -16,9 +16,12 @@ public class TransactionService {
     }
 
     public Transaction makeCommonTransaction(Long from, Long to, Long amount) {
+
         Transaction newTransaction = new Transaction(0L, from, to, amount, Calendar.getInstance().getTime());
         return transactionRepository.save(newTransaction);
     }
+
+
 
 
 
