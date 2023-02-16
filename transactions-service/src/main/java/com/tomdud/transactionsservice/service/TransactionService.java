@@ -1,10 +1,11 @@
-package com.tomdud.transactionsservice;
+package com.tomdud.transactionsservice.service;
 
+import com.tomdud.transactionsservice.Transaction;
+import com.tomdud.transactionsservice.repository.TransactionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Calendar;
-import java.util.Date;
 
 @Service
 public class TransactionService {
