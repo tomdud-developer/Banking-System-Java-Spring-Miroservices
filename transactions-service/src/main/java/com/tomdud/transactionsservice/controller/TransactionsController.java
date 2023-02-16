@@ -1,5 +1,6 @@
-package com.tomdud.transactionsservice;
+package com.tomdud.transactionsservice.controller;
 
+import com.tomdud.transactionsservice.model.Transaction;
 import com.tomdud.transactionsservice.service.TransactionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -14,9 +15,9 @@ public class TransactionsController {
 
     private final TransactionService transactionService;
 
-    @PostMapping("/from/{from}/to/{to}/amount/{amount}")
-    public Transaction makeCommonTransaction(@PathVariable Long from, @PathVariable Long to, @PathVariable Long amount) {
-        return  transactionService.makeCommonTransaction(from, to, amount);
+    @PostMapping("/from/{from}/to/{to}/amount/{quantity}")
+    public Transaction makeCommonTransaction(@PathVariable String from, @PathVariable String to, @PathVariable Long quantity) {
+        return  transactionService.makeCommonTransaction(from, to, quantity);
     }
 
 

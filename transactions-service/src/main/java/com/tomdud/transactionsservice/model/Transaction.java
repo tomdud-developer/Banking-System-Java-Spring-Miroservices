@@ -1,4 +1,4 @@
-package com.tomdud.transactionsservice;
+package com.tomdud.transactionsservice.model;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -23,14 +23,14 @@ public class Transaction {
     @Column
     private Long id;
 
-    @Column(name = "value_from")
-    private Long from;
+    @Column(name = "account_id_from")
+    private Long accountIdFrom;
 
-    @Column(name = "value_to")
-    private Long to;
+    @Column(name = "account_id_to")
+    private Long accountIdTo;
 
-    @Column(name = "amount")
-    private Long amount;
+    @Column(name = "quantity")
+    private Long quantity;
 
     @Column(name = "date")
     private Date date;
