@@ -16,37 +16,37 @@ import java.util.Calendar;
 public class TransactionService {
 
     private final TransactionRepository transactionRepository;
-    private final WebClient webClient;
+    private final WebClient.Builder webClientBuilder;
     @Autowired
-    public TransactionService(TransactionRepository transactionRepository, WebClient  webClient) {
+    public TransactionService(TransactionRepository transactionRepository, WebClient.Builder webClientBuilder) {
         this.transactionRepository = transactionRepository;
-        this. webClient =  webClient;
+        this.webClientBuilder =  webClientBuilder;
     }
 
     @Transactional
     public Transaction makeCommonTransaction(String from, String to, Long amount) {
         //Check existence of two of account
         AccountResponse accountFrom =
-                webClient.get()
-                    .uri("http://localhost:8081/accounts/" + from)
+                webClientBuilder.build().get()
+                    .uri("http://accounts-service/accounts/" + from)
                     .retrieve()
                     .bodyToMono(AccountResponse.class)
                     .block();
 
         AccountResponse accountTo =
-                webClient.get()
-                        .uri("http://localhost:8081/accounts/" + to)
+                webClientBuilder.build().get()
+                        .uri("http://accounts-service/accounts/" + to)
                         .retrieve()
                         .bodyToMono(AccountResponse.class)
                         .block();
 
         String makeBalanceURI = String.format(
-                "http://localhost:8081/accounts/balance/from/%d/to/%d/amount/%d",
+                "http://accounts-service/accounts/balance/from/%d/to/%d/amount/%d",
                 accountFrom.getAccountId(),
                 accountTo.getAccountId(),
                 amount);
 
-        Boolean check = webClient.put()
+        Boolean check = webClientBuilder.build().put()
                 .uri(makeBalanceURI)
                 .retrieve()
                 .bodyToMono(Boolean.class)
