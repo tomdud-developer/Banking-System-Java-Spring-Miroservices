@@ -1,10 +1,12 @@
 package com.tomdud.transactionsservice.service;
 
 import com.tomdud.transactionsservice.dto.AccountResponse;
+import com.tomdud.transactionsservice.event.TransactionEvent;
 import com.tomdud.transactionsservice.model.Transaction;
 import com.tomdud.transactionsservice.repository.TransactionRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -17,10 +19,15 @@ public class TransactionService {
 
     private final TransactionRepository transactionRepository;
     private final WebClient.Builder webClientBuilder;
+    private final KafkaTemplate<String, TransactionEvent> kafkaTemplate;
     @Autowired
-    public TransactionService(TransactionRepository transactionRepository, WebClient.Builder webClientBuilder) {
+    public TransactionService(
+            TransactionRepository transactionRepository,
+            WebClient.Builder webClientBuilder,
+            KafkaTemplate<String, TransactionEvent> kafkaTemplate) {
         this.transactionRepository = transactionRepository;
         this.webClientBuilder =  webClientBuilder;
+        this.kafkaTemplate = kafkaTemplate;
     }
 
     @Transactional
@@ -62,6 +69,13 @@ public class TransactionService {
                         .quantity(amount)
                         .date(Calendar.getInstance().getTime())
                         .build();
+
+        kafkaTemplate.send("notificationTopic", new TransactionEvent(
+                accountFrom.getAccountNumber(),
+                accountTo.getAccountNumber(),
+                newTransaction.getQuantity()
+        ));
+
         return transactionRepository.save(newTransaction);
     }
 
